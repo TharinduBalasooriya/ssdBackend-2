@@ -1,23 +1,25 @@
 const Message = require("../model/message.model");
 const crypto = require('crypto');
-
+const cipertitle = crypto.createCipher('aes192', 'a title');
+const ciperdescription = crypto.createCipher('aes192', 'a description');
+const ciperdate = crypto.createCipher('aes192', 'a date');
 
 const addNewMessage = async (req, res) => {
   if (req.body) {
     try {
       const titles = req.body.title;
       const descriptions = req.body.description;
-      const date = req.body.date;
-
-      const cipertitle = crypto.createCipher('aes192', 'a title');
-      const ciperdescription = crypto.createCipher('aes192', 'a description');
+      const dates = req.body.date;
+     
 
       var title = cipertitle.update(titles, 'utf8', 'hex');
       var description = ciperdescription.update(descriptions, 'utf8', 'hex');
+      var date = ciperdate.update(dates, 'utf8', 'hex');
 
-      title = title + cipertitle.final('hex');
-      description = description + ciperdescription.final('hex');
-
+      title=title+ciper.final('hex');
+      description=description+ciperr.final('hex');
+      date=date+ciperrr.final('hex');
+     
       const newMessage = new Message({
         title,
         description,
@@ -53,33 +55,7 @@ const getMessageByID = async (req, res) => {
   const id = req.params.id;
   await Message.findById(id)
     .then((Message) => {
-      const deciphertitle = crypto.createDecipher('aes192', 'a title');
-      const decipherdescription = crypto.createDecipher('aes192', 'a description');
-
-      var encryptedTitle = Message.title;
-      var encryptedDescription = Message.description;
-
-      var decryptedTitle = deciphertitle.update(encryptedTitle, 'hex', 'utf8');
-      decryptedTitle = decryptedTitle + deciphertitle.final('utf8');
-
-      var decryptedDescription = decipherdescription.update(encryptedDescription, 'hex', 'utf8');
-      decryptedDescription = decryptedDescription + decipherdescription.final('utf8');
-
-   
-
-      console.log(decryptedTitle);
-      console.log(decryptedDescription);
-
-      const message={
-        "title":decryptedTitle,
-        "description":decryptedDescription,
-        "date":Message.date
-        
-      }
-
-      res.status(200).send(message);
-     
-
+      res.status(200).send(Message);
     })
     .catch((err) => {
       res
@@ -88,14 +64,14 @@ const getMessageByID = async (req, res) => {
     });
 };
 
-const deleteMessage = async (req, res) => {
+const deleteMessage=async(req,res)=>{
   const id = req.params.id;
   await Message.findByIdAndDelete(id)
-    .then(() => {
-      res.status(200).send({ status: "Message deleted" });
+    .then(() =>{
+        res.status(200).send({status: "Message deleted"});
     }).catch((errr) => {
-      console.log(err.messege);
-      res.status(500).send({ status: "Error with delete Message", error: err.messege });
+        console.log(err.messege);
+        res.status(500).send({status: "Error with delete Message", error: err.messege});
     })
 
 
