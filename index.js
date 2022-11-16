@@ -1,44 +1,18 @@
-let express = require("express");
-const cors = require("cors");
-let mongoose = require("mongoose");
-require("dotenv").config();
-let messageApi = require("./src/api/message.api");
-let fileApi = require("./src/api/file.api");
-let authApi = require("./src/api/auth.api")
-const { urlencoded } = require("express");
+require('dotenv').config();
+const https = require('https');
+const fs = require('fs');
 
-
-let app = express();
-
+const app = require('./server');
 const PORT = process.env.PORT || 8070;
-
-app.use(urlencoded({ extended: true }));
-app.use(cors());
-app.use(express.json());
-
-app.get("/", (req, res) => {
-    res.send("sample route");
-  });
-  
-  app.use(
-    express.urlencoded({
-      extended: true,
-    })
-  );
-  
-  app.use(express.json());
-  app.use("/message", messageApi);
-  app.use("/file", fileApi);
-  app.use("/user", authApi);
-mongoose.connect(process.env.MONGODB_URL, { useUnifiedTopology: true, useNewUrlParser: true });
-
-let db = mongoose.connection;
-if (!db) {
-  console.log("Connection - error");
-} else{
-    console.log("Connected")
+const options = {
+  key: fs.readFileSync('./localhost-key.pem'), // Replace with the path to your key
+  cert: fs.readFileSync('./localhost.pem') // Replace with the path to your certificate
 }
 
-app.listen(PORT, () => {
-  console.log("Backend Started " + PORT);
+// app.listen(PORT, () => {
+//   console.log("Backend Started " + PORT);
+// });
+
+https.createServer(options, app).listen(PORT,() => {
+  console.log('Server listening on port ' + PORT);
 });

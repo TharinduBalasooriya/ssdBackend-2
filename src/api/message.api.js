@@ -1,12 +1,13 @@
 const express = require("express");
 let router = require("express").Router();
 const controller = require("../controller/message.controller");
+const verifyToken = require("../middleware/auth.middleware");
 
 
-router.post("/",  controller.addNewMessage);
-router.get("/",  controller. getAllMessages);
-router.get("/:id",  controller. getMessageByID);
-router.delete("/:id",  controller. deleteMessage);
+router.post("/",  verifyToken,controller.addNewMessage);
+router.get("/", verifyToken , controller. getAllMessages);
+router.get("/:id",  verifyToken ,controller. getMessageByID);
+router.delete("/:id",  verifyToken ,controller. deleteMessage);
 
 
 module.exports = router;
