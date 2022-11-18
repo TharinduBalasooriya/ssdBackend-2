@@ -5,7 +5,7 @@ const verifyToken = require("../middleware/auth.middleware");
 
 
 router.post("/",  verifyToken,controller.addNewMessage);
-router.get("/", verifyToken , controller. getAllMessages);
+router.get("/getByUser/:id", verifyToken , controller.getAllMessages);
 router.get("/:id",  verifyToken ,controller. getMessageByID);
 router.delete("/:id",  verifyToken ,controller. deleteMessage);
 

@@ -13,6 +13,10 @@ const messageSchema = new Schema({
   date: {
     type: String,
   
+  }, 
+  userID: {
+    type: String,
+  
   },
 });
 const Message = mongoose.model("Message", messageSchema);
